@@ -49,7 +49,7 @@ public class ToDoDatabase {
    */
   public ToDo[] listToDos(Map<String, List<String>> queryParams) {
     ToDo[] filteredToDos = allToDos;
-
+    filteredToDos = Arrays.copyOf(filteredToDos, Integer.parseInt(queryParams.get("limit").get(0)));
     return filteredToDos;
   }
 }
