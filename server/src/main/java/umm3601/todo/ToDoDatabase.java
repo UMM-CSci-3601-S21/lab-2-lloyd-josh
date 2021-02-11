@@ -12,8 +12,8 @@ import com.google.gson.Gson;
  * A fake "database" of ToDos
  * <p>
  * Since we don't want to complicate this lab with a real database, we're going
- * to instead just read a bunch of user data from a specified JSON file, and
- * then provide various database-like methods that allow the `UserController` to
+ * to instead just read a bunch of todo data from a specified JSON file, and
+ * then provide various database-like methods that allow the `ToDoController` to
  * "query" the "database".
  */
 public class ToDoDatabase {
@@ -31,21 +31,21 @@ public class ToDoDatabase {
   }
 
   /**
-   * Get the single user specified by the given ID. Return `null` if there is no
-   * user with that ID.
+   * Get the single todo specified by the given ID. Return `null` if there is no
+   * todo with that ID.
    *
-   * @param id the ID of the desired user
-   * @return the user with the given ID, or null if there is no user with that ID
+   * @param id the ID of the desired todo
+   * @return the todo with the given ID, or null if there is no todo with that ID
    */
   public ToDo getToDo(String id) {
     return Arrays.stream(allToDos).filter(x -> x._id.equals(id)).findFirst().orElse(null);
   }
 
   /**
-   * Get an array of all the users satisfying the queries in the params.
+   * Get an array of all the todos satisfying the queries in the params.
    *
    * @param queryParams map of key-value pairs for the query
-   * @return an array of all the users matching the given criteria
+   * @return an array of all the todos matching the given criteria
    */
   public ToDo[] listToDos(Map<String, List<String>> queryParams) {
     ToDo[] filteredToDos = allToDos;

@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
 
 /**
- * Controller that manages requests for info about users.
+ * Controller that manages requests for info about todos.
  */
 public class ToDoController {
 
