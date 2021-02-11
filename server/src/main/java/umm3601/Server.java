@@ -6,17 +6,24 @@ import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import umm3601.user.Database;
 import umm3601.user.UserController;
+import umm3601.todo.ToDoDatabase;
+import umm3601.todo.ToDoController;
+
 
 public class Server {
 
   public static final String CLIENT_DIRECTORY = "../client";
   public static final String USER_DATA_FILE = "/users.json";
+  public static final String TODOS_DATA_FILE ="/todos.json";
+
   private static Database userDatabase;
+  private static ToDoDatabase toDoDatabase;
 
   public static void main(String[] args) {
 
     // Initialize dependencies
     UserController userController = buildUserController();
+    ToDoController toDoController = buildToDoController();
 
     Javalin server = Javalin.create(config -> {
       // This tells the server where to look for static files,
@@ -39,6 +46,12 @@ public class Server {
 
     // List users, filtered using query parameters
     server.get("/api/users", ctx -> userController.getUsers(ctx));
+
+    // get todo
+    server.get("/api/todos/:id", ctx -> toDoController.getToDo(ctx));
+
+    // List todos
+    server.get("/api/todos", ctx -> toDoController.getToDos(ctx));
   }
 
   /***
@@ -64,5 +77,30 @@ public class Server {
     }
 
     return userController;
+  }
+
+  /***
+   * Create a database using the json file, use it as data source for a new
+   * ToDoController
+   *
+   * Constructing the controller might throw an IOException if there are problems
+   * reading from the JSON "database" file. If that happens we'll print out an
+   * error message exit the program.
+   */
+  private static ToDoController buildToDoController() {
+    ToDoController todoController = null;
+
+    try {
+      toDoDatabase = new ToDoDatabase(TODOS_DATA_FILE);
+      todoController = new ToDoController(toDoDatabase);
+    } catch (IOException e) {
+      System.err.println("The server failed to load the todos data; shutting down.");
+      e.printStackTrace(System.err);
+
+      // Exit from the Java program
+      System.exit(1);
+    }
+
+    return todoController;
   }
 }
