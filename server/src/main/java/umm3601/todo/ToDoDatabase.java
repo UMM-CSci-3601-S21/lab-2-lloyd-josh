@@ -62,12 +62,23 @@ public class ToDoDatabase {
         throw new BadRequestResponse("Specified limit '" + todoParam + "' can't be parsed to an integer");
       }
     }
+
+    // code to filter by a string in the body of the todo
+    if (queryParams.containsKey("contains")){
+      String targetString = queryParams.get("contains").get(0);
+      filteredToDos = filterToDosByBody(filteredToDos, targetString);
+
+      }
     return filteredToDos;
   }
-/**
- * Method displaying only a set limit of todos
- */
+
+ // Method displaying only a set limit of todos
+
   public ToDo[] limitToDos(ToDo[] todos, Integer targetLimitToDos) {
     return Arrays.stream(todos).limit(targetLimitToDos).toArray(ToDo[]::new);
+  }
+// Method displaying only todos with a set string inside body
+  public ToDo[] filterToDosByBody(ToDo[] todos, String targetString){
+    return Arrays.stream(todos).filter(x -> x.body.contains(targetString)).toArray(ToDo[]::new);
   }
 }
