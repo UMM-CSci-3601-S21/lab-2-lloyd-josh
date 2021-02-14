@@ -83,4 +83,18 @@ public class ToDoControllerSpec {
       todoController.getToDos(ctx);
     });
   }
+
+
+  // test for checking how many todos contain the string "in occaecat"
+  // correct answer should be 3.
+  @Test
+  public void listToDosWithContainsFilter() throws IOException {
+    ToDoDatabase database = new ToDoDatabase("/todos.json");
+    Map<String, List<String>> queryParams = new HashMap<>();
+
+    queryParams.put("contains", Arrays.asList(new String[] { "in occaecat" }));
+    ToDo[] allTodos = database.listToDos(queryParams);
+    assertEquals(3, allTodos.length, "Incorrect number of todos with 'In sint'");
+
+  }
 }
