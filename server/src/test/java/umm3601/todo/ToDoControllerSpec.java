@@ -1,6 +1,8 @@
 package umm3601.todo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -96,5 +98,21 @@ public class ToDoControllerSpec {
     ToDo[] allTodos = database.listToDos(queryParams);
     assertEquals(3, allTodos.length, "Incorrect number of todos with 'In sint'");
 
+  }
+
+  @Test
+  public void GET_to_request_status_false() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("status", Arrays.asList(new String[] { "false" }));
+
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+    todoController.getToDos(ctx);
+
+    // Confirm that all the todos are false.
+    ArgumentCaptor<ToDo[]> argument = ArgumentCaptor.forClass(ToDo[].class);
+    verify(ctx).json(argument.capture());
+    for (ToDo todo : argument.getValue()) {
+      assertFalse(todo.status);
+    }
   }
 }
