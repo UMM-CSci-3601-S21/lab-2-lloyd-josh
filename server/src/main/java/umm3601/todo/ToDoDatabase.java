@@ -8,6 +8,8 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
+import io.javalin.http.BadRequestResponse;
+
 /**
  * A fake "database" of ToDos
  * <p>
@@ -50,6 +52,33 @@ public class ToDoDatabase {
   public ToDo[] listToDos(Map<String, List<String>> queryParams) {
     ToDo[] filteredToDos = allToDos;
 
+    // limit number of todos, if contained in the query
+    if (queryParams.containsKey("limit")) {
+      String todoParam = queryParams.get("limit").get(0);
+      try {
+        int targetLimit = Integer.parseInt(todoParam);
+        filteredToDos = limitToDos(filteredToDos, targetLimit);
+      } catch (NumberFormatException e) {
+        throw new BadRequestResponse("Specified limit '" + todoParam + "' can't be parsed to an integer");
+      }
+    }
+
+    // code to filter by a string in the body of the todo
+    if (queryParams.containsKey("contains")){
+      String targetString = queryParams.get("contains").get(0);
+      filteredToDos = filterToDosByBody(filteredToDos, targetString);
+
+      }
     return filteredToDos;
+  }
+
+ // Method displaying only a set limit of todos
+
+  public ToDo[] limitToDos(ToDo[] todos, Integer targetLimitToDos) {
+    return Arrays.stream(todos).limit(targetLimitToDos).toArray(ToDo[]::new);
+  }
+// Method displaying only todos with a set string inside body
+  public ToDo[] filterToDosByBody(ToDo[] todos, String targetString){
+    return Arrays.stream(todos).filter(x -> x.body.contains(targetString)).toArray(ToDo[]::new);
   }
 }
