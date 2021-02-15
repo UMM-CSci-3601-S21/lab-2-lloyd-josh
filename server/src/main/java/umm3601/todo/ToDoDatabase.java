@@ -69,6 +69,16 @@ public class ToDoDatabase {
       filteredToDos = filterToDosByBody(filteredToDos, targetString);
 
       }
+
+      if (queryParams.containsKey("status")) {
+        String statusParam = queryParams.get("status").get(0);
+        if( "complete".equals(statusParam)) {
+          filteredToDos = filterToDosByStatus(filteredToDos, true);
+        }
+        else {
+          filteredToDos = filterToDosByStatus(filteredToDos, false);
+        }
+      }
     return filteredToDos;
   }
 
@@ -80,5 +90,9 @@ public class ToDoDatabase {
 // Method displaying only todos with a set string inside body
   public ToDo[] filterToDosByBody(ToDo[] todos, String targetString){
     return Arrays.stream(todos).filter(x -> x.body.contains(targetString)).toArray(ToDo[]::new);
+  }
+  // Method displaying todos by status, either complete or incomplete
+  public ToDo[] filterToDosByStatus(ToDo[] todos, boolean targetStatus){
+    return Arrays.stream(todos).filter(x-> x.status == targetStatus).toArray(ToDo[]::new);
   }
 }
