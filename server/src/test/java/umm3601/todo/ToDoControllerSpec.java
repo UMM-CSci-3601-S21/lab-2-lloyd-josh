@@ -115,4 +115,15 @@ public class ToDoControllerSpec {
       assertFalse(todo.status);
     }
   }
+
+  @Test
+  public void listToDosWithOwnerFilter() throws IOException {
+    ToDoDatabase database = new ToDoDatabase("/todos.json");
+    Map<String, List<String>> queryParams = new HashMap<>();
+    // confirm that length of Blanche owned todos is 43.
+    queryParams.put("owner", Arrays.asList(new String[] { "Blanche" }));
+    ToDo[] allTodos = database.listToDos(queryParams);
+    assertEquals(43, allTodos.length, "Incorrect number of todos with 'In sint'");
+
+  }
 }
