@@ -84,6 +84,11 @@ public class ToDoDatabase {
         String targetString = queryParams.get("owner").get(0);
         filteredToDos = filterToDosByOwner(filteredToDos, targetString);
       }
+
+      if (queryParams.containsKey("category")) {
+        String targetString = queryParams.get("category").get(0);
+        filteredToDos = filterToDosByCategory(filteredToDos, targetString);
+      }
     return filteredToDos;
   }
 
@@ -102,5 +107,8 @@ public class ToDoDatabase {
   }
   public ToDo[] filterToDosByOwner(ToDo[] todos, String targetOwner) {
     return Arrays.stream(todos).filter(x -> x.owner.equals(targetOwner)).toArray(ToDo[]::new);
+  }
+  public ToDo[] filterToDosByCategory(ToDo[] todos, String targetCategory) {
+    return Arrays.stream(todos).filter(x -> x.category.equals(targetCategory)).toArray(ToDo[]::new);
   }
 }
