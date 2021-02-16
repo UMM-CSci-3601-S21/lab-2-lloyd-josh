@@ -79,6 +79,11 @@ public class ToDoDatabase {
           filteredToDos = filterToDosByStatus(filteredToDos, false);
         }
       }
+
+      if (queryParams.containsKey("owner")) {
+        String targetString = queryParams.get("owner").get(0);
+        filteredToDos = filterToDosByOwner(filteredToDos, targetString);
+      }
     return filteredToDos;
   }
 
@@ -94,5 +99,8 @@ public class ToDoDatabase {
   // Method displaying todos by status, either complete or incomplete
   public ToDo[] filterToDosByStatus(ToDo[] todos, boolean targetStatus){
     return Arrays.stream(todos).filter(x-> x.status == targetStatus).toArray(ToDo[]::new);
+  }
+  public ToDo[] filterToDosByOwner(ToDo[] todos, String targetOwner) {
+    return Arrays.stream(todos).filter(x -> x.owner.equals(targetOwner)).toArray(ToDo[]::new);
   }
 }
