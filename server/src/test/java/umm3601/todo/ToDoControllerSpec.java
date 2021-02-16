@@ -123,7 +123,16 @@ public class ToDoControllerSpec {
     // confirm that length of Blanche owned todos is 43.
     queryParams.put("owner", Arrays.asList(new String[] { "Blanche" }));
     ToDo[] allTodos = database.listToDos(queryParams);
-    assertEquals(43, allTodos.length, "Incorrect number of todos with 'In sint'");
+    assertEquals(43, allTodos.length, "Incorrect number of todos with owner 'Blanche'");
+  }
 
+  @Test
+  public void listToDosWithCategoryFilter() throws IOException {
+    ToDoDatabase database = new ToDoDatabase("/todos.json");
+    Map<String, List<String>> queryParams = new HashMap<>();
+    // confirm that length of Blanche owned todos is 43.
+    queryParams.put("category", Arrays.asList(new String[] { "homework" }));
+    ToDo[] allTodos = database.listToDos(queryParams);
+    assertEquals(79, allTodos.length, "Incorrect number of todos with category 'homework'");
   }
 }
